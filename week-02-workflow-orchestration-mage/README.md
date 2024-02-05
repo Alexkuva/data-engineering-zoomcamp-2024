@@ -1,5 +1,14 @@
 # Docker compose configuration
 
+## Fill .env file with the follwing variables:
+- PROJECT_NAME=""
+- POSTGRES_DBNAME=""
+- POSTGRES_SCHEMA=""
+- POSTGRES_USER=""
+- POSTGRES_PASSWORD=""
+- POSTGRES_HOST=""
+- POSTGRES_PORT=""
+
 ## run docker-compose.yaml
 ```dockerfile
 docker-compose up -d
