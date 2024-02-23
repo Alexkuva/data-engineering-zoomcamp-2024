@@ -19,7 +19,7 @@ Only in stg_green_tripdata.sql, stg_yellow_tripdata.sql & stg_fhv_tripdata.
 
 ## Question 2:
 ### What is the code that our CI job will run? Where is this code coming from?
-- The code from the development branch we are requesting to merge to main
+- The code from a development branch requesting a merge to main
 
 
 ## Question 3:
