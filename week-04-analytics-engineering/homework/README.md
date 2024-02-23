@@ -2,11 +2,11 @@
 
 ## DBT (Data Build Tool)
 
-## Question 1. 
+## Question 1:
 ### What happens when we execute dbt build --vars '{'is_test_run':'true'}'
 - It applies a limit 100 only to our staging models
 
-Only in stg_green_tripdata.sql & stg_yellow_tripdata.sql
+Only in stg_green_tripdata.sql, stg_yellow_tripdata.sql & stg_fhv_tripdata.
 ```sql
 -- dbt build --select <model_name> --vars '{'is_test_run': 'false'}'
 {% if var('is_test_run', default=true) %}
