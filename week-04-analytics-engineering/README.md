@@ -1,4 +1,4 @@
-Project has been develop with 2 differents modes:
+The project has been developed with two distinct modes:
 - local with PostGreSQL
 - local with Google Big Query
 
@@ -18,7 +18,7 @@ Project has been develop with 2 differents modes:
 - docker-compose.yaml : launch services - use is_test_run == true in order to load sample data
 
 
-## local with PostGreSQL
+## local with Google Big Query
 (recommanded!)
 
 ### Architecture:
