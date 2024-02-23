@@ -1,0 +1,1 @@
+CREATE SCHEMA trip_data_all;

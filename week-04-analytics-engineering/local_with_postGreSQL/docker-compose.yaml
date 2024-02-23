@@ -1,0 +1,87 @@
+services:
+  pgdatabase:
+    image: postgres:14
+    restart: on-failure
+    container_name: ${PROJECT_NAME}-postgres-wk4
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DBNAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+      - "./src/sql/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ${PROJECT_NAME}-pgadmin-wk4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8080:80"
+  ingest_yellow_taxi_trips_data:
+    container_name: ${PROJECT_NAME}-ingest_yellow-wk4
+    build:
+      context: ./src/python
+      dockerfile: ../../docker/ingest-data.dockerfile
+    command:
+        - --user=${POSTGRES_USER}
+        - --password=${POSTGRES_PASSWORD}
+        - --host=pgdatabase
+        - --port=${POSTGRES_PORT}
+        - --db=${POSTGRES_DBNAME}
+        - --schema=${POSTGRES_SCHEMA}
+        - --table_name=yellow_tripdata
+        - --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata
+        - --starting_date=201901
+        - --ending_date=202012
+        - --is_test_run=true
+    depends_on:
+      - pgdatabase
+      - pgadmin
+  ingest_green_taxi_trips_data:
+    container_name: ${PROJECT_NAME}-ingest_green-wk4
+    build:
+      context: ./src/python
+      dockerfile: ../../docker/ingest-data.dockerfile
+    command:
+        - --user=${POSTGRES_USER}
+        - --password=${POSTGRES_PASSWORD}
+        - --host=pgdatabase
+        - --port=${POSTGRES_PORT}
+        - --db=${POSTGRES_DBNAME}
+        - --schema=${POSTGRES_SCHEMA}
+        - --table_name=green_tripdata
+        - --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata
+        - --starting_date=201901
+        - --ending_date=202012
+        - --is_test_run=true
+    depends_on:
+      - pgdatabase
+      - pgadmin
+      - ingest_yellow_taxi_trips_data
+  ingest_fhv_taxi_trips_data:
+    container_name: ${PROJECT_NAME}-ingest_fhv-wk4
+    build:
+      context: ./src/python
+      dockerfile: ../../docker/ingest-data.dockerfile
+    command:
+        - --user=${POSTGRES_USER}
+        - --password=${POSTGRES_PASSWORD}
+        - --host=pgdatabase
+        - --port=${POSTGRES_PORT}
+        - --db=${POSTGRES_DBNAME}
+        - --schema=${POSTGRES_SCHEMA}
+        - --table_name=fhv_tripdata
+        - --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/fhv_tripdata
+        - --starting_date=201901
+        - --ending_date=201912
+        - --is_test_run=true
+    depends_on:
+      - pgdatabase
+      - pgadmin
+      - ingest_yellow_taxi_trips_data
+      - ingest_green_taxi_trips_data

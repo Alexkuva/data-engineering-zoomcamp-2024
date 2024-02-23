@@ -1,0 +1,10 @@
+taxi_rides_gbq_ny:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: onyx-hangout-411709
+      dataset: trips_data_all
+      threads: 4
+      keyfile: ../key/onyx-hangout-411709-309b6dab16d6.json

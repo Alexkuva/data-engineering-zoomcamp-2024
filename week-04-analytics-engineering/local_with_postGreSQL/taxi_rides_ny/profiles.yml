@@ -1,0 +1,12 @@
+taxi_rides_ny:
+  outputs:
+    dev:
+      dbname: nyc_taxi_rides
+      host: localhost
+      password: postgres
+      port: 5432
+      schema: trips_data_all
+      threads: 1
+      type: postgres
+      user: postgres
+  target: dev
