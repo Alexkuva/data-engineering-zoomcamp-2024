@@ -1,49 +1,11 @@
 services:
-  pgdatabase:
-    image: postgres:13
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=ny_taxi
+  jupyter_notebook:
+    container_name: jupyter_notebook
+    image: jupyter/pyspark-notebook:latest
+    platform: linux/amd64
     volumes:
-      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+      - "./scripts/sparkdata:/sparkdata"
+      - "./scripts/work:/home/jovyan/work"
     ports:
-      - "5432:5432"
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=root
-    ports:
-      - "8080:80"
-  ingest_taxi_trips_data:
-    build:
-      context: ./scripts/
-      dockerfile: ../docker/ingest-data.dockerfile
-    command:
-        - --user=root
-        - --password=root
-        - --host=pgdatabase
-        - --port=5432
-        - --db=ny_taxi
-        - --table_name=yellow_taxi_trips
-        - --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-09.csv.gz
-    depends_on:
-      - pgdatabase
-      - pgadmin
-  ingest_taxi_zone_data:
-    build:
-      context: ./scripts/
-      dockerfile: ../docker/ingest-data.dockerfile
-    command:
-        - --user=root
-        - --password=root
-        - --host=pgdatabase
-        - --port=5432
-        - --db=ny_taxi
-        - --table_name=taxi_zone
-        - --url=https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv
-    depends_on:
-      - pgdatabase
-      - pgadmin
-      - ingest_taxi_trips_data
+      - '8080:8080'
+      - '8888:8888'   # this port is for jupyter notebook
